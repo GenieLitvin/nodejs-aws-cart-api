@@ -1,7 +1,9 @@
 # compiled output
 /dist
+/dist-compiled
 /node_modules
-
+/cdk.out
+.env
 # Logs
 logs
 *.log
