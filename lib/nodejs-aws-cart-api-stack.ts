@@ -2,7 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as path from 'path';
-
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 interface NodejsAwsCartApiStackProps extends cdk.StackProps {
   environmentVariables: { [key: string]: string };
 }
@@ -14,8 +14,12 @@ export class NodejsAwsCartApiStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_18_X, 
       handler: 'main.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../dist-compiled')), 
-      environment: props.environmentVariables,     
-
+      environment: props.environmentVariables, 
+    });
+     // Define the API Gateway
+     new apigateway.LambdaRestApi(this, 'NestJsApi', {
+      handler: nestLambda,
+      proxy: true,
     });
   }
 }
