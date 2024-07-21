@@ -24,7 +24,7 @@
     "build:wp": "webpack",
     "build:nest": "nest build",
     "build-lambda": "nest build --webpack --webpackPath webpack.config.js",
-    "start:local": "ts-node -r tsconfig-paths/register src/main-local.ts"
+    "start:local": "ts-node -r tsconfig-paths/register src/main-local.ts --watch"
   },
   "dependencies": {
     "@aws-cdk/aws-lambda": "^1.204.0",
