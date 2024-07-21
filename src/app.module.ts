@@ -5,6 +5,8 @@ import { CartModule } from './cart/cart.module';
 import { AuthModule } from './auth/auth.module';
 import { OrderModule } from './order/order.module';
 import { Cart } from './cart/models/cart'; 
+import { User } from './users/models/user'; 
+
 import { CartItem } from './cart/models/cart-item'; 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
@@ -18,15 +20,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         type: 'postgres',
         host: configService.get<string>('DB_HOST'),
         port: parseInt(configService.get<string>('DB_PORT'), 10),
-        username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
+        username: configService.get<string>('DB_USERNAME'),
+        entities: [Cart, CartItem, User],
         database: configService.get<string>('DB_DATABASE'),
-        entities: [Cart, CartItem],
-        synchronize: true,
+        synchronize: false,
+        logging: true,
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Cart, CartItem]),
     AuthModule,
     CartModule,
     OrderModule,
