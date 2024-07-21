@@ -6,13 +6,18 @@ CREATE TABLE carts (
     status VARCHAR(10) NOT NULL CHECK (status IN ('OPEN', 'ORDERED'))
 );
 
-
 CREATE TABLE cart_items (
     id UUID PRIMARY KEY default uuid_generate_v4(),
     cart_id UUID NOT NULL,
     product_id UUID NOT NULL,
     count INTEGER NOT NULL CHECK (count >= 0),
     FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE
+);
+
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(100) NOT NULL,
+  password VARCHAR(100) NOT NULL
 );
 
 INSERT INTO carts (user_id,status) VALUES
