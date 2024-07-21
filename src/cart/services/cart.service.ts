@@ -10,14 +10,14 @@ export class CartService {
   constructor(
     @InjectRepository(Cart)
     private cartRepository: Repository<Cart>,
-    @InjectRepository(CartItem)
-    private cartItemRepository: Repository<CartItem>
   ) {}
 
   async findByUserId(userId: string): Promise<Cart> {
     return this.cartRepository.findOne({ where: { id: userId } });
   }
-
+  async findAll(): Promise<Cart[]> {
+    return this.cartRepository.find();
+  }
   async createByUserId(userId: string): Promise<Cart> {
     const userCart = this.cartRepository.create({
       id: userId,
@@ -29,9 +29,10 @@ export class CartService {
 
   async findOrCreateByUserId(userId: string): Promise<Cart> {
     let userCart = await this.findByUserId(userId);
-
+    console.log('userCart', userCart)
     if (!userCart) {
       userCart = await this.createByUserId(userId);
+      console.log('userCart2', userCart)
     }
 
     return userCart;

@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Cart } from './cart';
 
-@Entity('cart_items') // Specify the custom table name
+@Entity('cart_items')
 export class CartItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;

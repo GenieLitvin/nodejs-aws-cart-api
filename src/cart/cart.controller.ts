@@ -1,10 +1,10 @@
-import { Controller, Get, Delete, Put, Body, Req, Post, UseGuards, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Delete, Put, Body, Req, Post, UseGuards, HttpStatus, ConsoleLogger } from '@nestjs/common';
 import { OrderService } from '../order';
 import { AppRequest, getUserIdFromRequest } from '../shared';
 import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
-//import { JwtAuthGuard } from '../auth/jwt-auth.guard'; // Ensure correct path
-//import { BasicAuthGuard } from '../auth/basic-auth.guard'; // Ensure correct path
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'; // Ensure correct path
+import { BasicAuthGuard } from '../auth/guards'; // Ensure correct path
 
 @Controller('api/profile/cart')
 export class CartController {
@@ -13,10 +13,13 @@ export class CartController {
     private orderService: OrderService,
   ) {}
 
-  //@UseGuards(JwtAuthGuard, BasicAuthGuard)
+  @UseGuards(BasicAuthGuard)
   @Get()
   async findUserCart(@Req() req: AppRequest) {
-    const cart = await this.cartService.findOrCreateByUserId(getUserIdFromRequest(req));
+    console.log('here', req.user)
+    const id = getUserIdFromRequest(req)
+    console.log('id',id)
+    const cart = await this.cartService.findOrCreateByUserId(id);
 
     return {
       statusCode: HttpStatus.OK,

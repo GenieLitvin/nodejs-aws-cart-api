@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { CartStatuses } from './cart-statuses';
 import { CartItem } from './cart-item';
 
-@Entity('carts') // Specify the custom table name
+@Entity('carts')
 export class Cart {
   @PrimaryGeneratedColumn('uuid')
   id: string;

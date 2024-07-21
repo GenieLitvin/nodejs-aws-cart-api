@@ -9,7 +9,7 @@ import { Cart } from './models/cart';
 import { CartItem } from './models/cart-item';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Cart, CartItem]),
+    TypeOrmModule.forFeature([Cart]),
     OrderModule,
   ],
   providers: [CartService],
