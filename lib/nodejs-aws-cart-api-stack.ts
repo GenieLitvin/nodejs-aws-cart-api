@@ -16,10 +16,21 @@ export class NodejsAwsCartApiStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.join(__dirname, '../dist-compiled')), 
       environment: props.environmentVariables, 
     });
-     // Define the API Gateway
+
      new apigateway.LambdaRestApi(this, 'NestJsApi', {
       handler: nestLambda,
       proxy: true,
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigateway.Cors.ALL_ORIGINS,
+        allowMethods: apigateway.Cors.ALL_METHODS, // ALLOW GET, POST, PUT, DELETE, etc.
+        allowHeaders: [
+          'Content-Type',
+          'X-Amz-Date',
+          'Authorization',
+          'X-Api-Key',
+          'X-Amz-Security-Token',
+        ],
+      },
     });
   }
 }
