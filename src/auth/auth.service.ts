@@ -12,7 +12,7 @@ export class AuthService {
   ) {}
 
   async validateUser(name: string, password: string): Promise<User> {
-   
+
     const user = await this.usersService.findOne(name);
     if (user) {
       console.log('validateUser&',user);
@@ -44,7 +44,7 @@ export class AuthService {
 
   loginBasic(user: User) {
     // const payload = { username: user.name, sub: user.id };
-
+    
     function encodeUserToken(user) {
       const { id, name, password } = user;
       const buf = Buffer.from([name, password].join(':'), 'utf8');

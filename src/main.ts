@@ -13,6 +13,12 @@ let cachedServer: Server;
 async function bootstrapServer(): Promise<Server> {
   if (!cachedServer) {
     const nestApp = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
+    nestApp.enableCors({
+      origin: '*', 
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+      allowedHeaders: 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token',
+    });
+    
     await nestApp.init();
     cachedServer = createServer(expressApp);
   }

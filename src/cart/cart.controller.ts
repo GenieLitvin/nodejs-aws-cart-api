@@ -5,6 +5,7 @@ import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'; // Ensure correct path
 import { BasicAuthGuard } from '../auth/guards'; // Ensure correct path
+import { CartStatuses } from './models/cart-statuses';
 
 @Controller('api/profile/cart')
 export class CartController {
@@ -28,9 +29,10 @@ export class CartController {
     };
   }
 
-  //@UseGuards(JwtAuthGuard, BasicAuthGuard)
+  @UseGuards(BasicAuthGuard)
   @Put()
   async updateUserCart(@Req() req: AppRequest, @Body() body) { // TODO: validate body payload...
+    console.log('put')
     const cart = await this.cartService.updateByUserId(getUserIdFromRequest(req), body);
 
     return {
@@ -43,7 +45,7 @@ export class CartController {
     };
   }
 
-  //@UseGuards(JwtAuthGuard, BasicAuthGuard)
+  @UseGuards(BasicAuthGuard)
   @Delete()
   async clearUserCart(@Req() req: AppRequest) {
     await this.cartService.removeByUserId(getUserIdFromRequest(req));
@@ -54,7 +56,7 @@ export class CartController {
     };
   }
 
-  //@UseGuards(JwtAuthGuard, BasicAuthGuard)
+  @UseGuards(BasicAuthGuard)
   @Post('checkout')
   async checkout(@Req() req: AppRequest, @Body() body) {
     const userId = getUserIdFromRequest(req);
@@ -72,6 +74,7 @@ export class CartController {
 
     const { id: cartId, items } = cart;
     const total = calculateCartTotal(cart);
+    
     const order = await this.orderService.create({
       ...body, // TODO: validate and pick only necessary data
       userId,
@@ -79,8 +82,12 @@ export class CartController {
       items,
       total,
     });
-    await this.cartService.removeByUserId(userId);
 
+  console.log( order)
+    // TODO
+    //await this.cartService.removeByUserId(userId);
+    order.status = 'ORDERED'
+    await this.cartService.updateByUserId(userId, cart, CartStatuses.ORDERED)
     return {
       statusCode: HttpStatus.OK,
       message: 'OK',

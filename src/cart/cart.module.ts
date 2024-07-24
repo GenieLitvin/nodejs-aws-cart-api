@@ -7,6 +7,7 @@ import { CartService } from './services';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Cart } from './models/cart';
 import { CartItem } from './models/cart-item';
+import { OrderService } from 'src/order';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Cart]),

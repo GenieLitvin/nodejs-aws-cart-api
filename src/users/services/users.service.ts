@@ -17,8 +17,15 @@ export class UsersService {
 
   async createOne({ name, password }): Promise<User> {
     const id = v4(); 
-    const newUser = await this.userRepository.create({id, name, password });
-    console.log('newUser', newUser)
+    const newUser = this.userRepository.create({ id, name, password });
+
+    try {
+      await this.userRepository.save(newUser);    
+    } catch (err) {
+      console.error('Error creating user:', err);
+      throw new Error('Failed to create user');
+    }
+
     return newUser;
 
   }

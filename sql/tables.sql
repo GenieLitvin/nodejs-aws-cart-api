@@ -1,9 +1,11 @@
+CREATE TYPE order_status AS ENUM ('OPEN', 'ORDERED');
+
 CREATE TABLE carts (
     id UUID PRIMARY key default uuid_generate_v4(),
     user_id UUID NOT NULL,
     created_at DATE NOT NULL DEFAULT CURRENT_DATE,
     updated_at DATE NOT NULL DEFAULT CURRENT_DATE,
-    status VARCHAR(10) NOT NULL CHECK (status IN ('OPEN', 'ORDERED'))
+    status order_status
 );
 
 CREATE TABLE cart_items (
@@ -14,6 +16,16 @@ CREATE TABLE cart_items (
     FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE
 );
 
+CREATE TABLE orders (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL,
+    cart_id UUID REFERENCES carts(id),
+    payment JSON,
+    delivery JSON,
+    comments TEXT,
+    status order_status,
+    total NUMERIC
+);
 CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(100) NOT NULL,
