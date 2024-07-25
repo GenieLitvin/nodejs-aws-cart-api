@@ -15,7 +15,7 @@ export class CartService {
   ) {}
 
   async findByUserId(userId: string): Promise<Cart> {
-    return this.cartRepository.findOne({ where: { id: userId } });
+    return this.cartRepository.findOne({ where: { id: userId } , relations: ['items']});
   }
   async findAll(): Promise<Cart[]> {
     return this.cartRepository.find();
@@ -44,7 +44,6 @@ export class CartService {
 
   async updateByUserId(userId: string, { items }: Cart, status: CartStatuses = CartStatuses.OPEN ): Promise<Cart> {
 
-    console.log('HI, ', userId)
     let userCart = await this.findOrCreateByUserId(userId);
     userCart.items = items;
     userCart.status = status;

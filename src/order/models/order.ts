@@ -4,9 +4,10 @@ import {
     Column,
     ManyToOne,
     ManyToMany,
-    JoinTable,
+    JoinTable,JoinColumn,
   } from 'typeorm';
   import { CartItem } from '../../cart/models/cart-item';
+  import { Cart } from '../../cart/models/cart';
   
   @Entity({ name: 'orders' })
   export class Order {
@@ -16,12 +17,15 @@ import {
     @Column({ type: 'uuid' })
     user_id: string;
   
-    @Column({ type: 'uuid' })
-    cart_id: string;
+    @ManyToOne(() => Cart, { eager: true }) // `eager: true` загрузка данных о Cart
+    @JoinColumn({ name: 'cart_id' }) // Указываем, что колонка в таблице orders называется cart_id
+    cart: Cart;
   
-    @ManyToMany(() => CartItem)
-    @JoinTable()
-    items: CartItem[];
+    @Column({ type: 'jsonb' })
+    items: Array<{
+      productId: string;
+      count: number;
+    }>;
   
     @Column('jsonb')
     payment: {
@@ -41,8 +45,8 @@ import {
   
     @Column({
       type: 'enum',
-      enum: ['OPEN', 'ORDERED'],
-      default: 'OPEN',
+      enum: ['CREATED'],
+      default: 'CREATED',
     })
     status: string;
   

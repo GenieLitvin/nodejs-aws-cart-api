@@ -32,9 +32,8 @@ export class CartController {
   @UseGuards(BasicAuthGuard)
   @Put()
   async updateUserCart(@Req() req: AppRequest, @Body() body) { // TODO: validate body payload...
-    console.log('put')
-    const cart = await this.cartService.updateByUserId(getUserIdFromRequest(req), body);
 
+    const cart = await this.cartService.updateByUserId(getUserIdFromRequest(req), body);
     return {
       statusCode: HttpStatus.OK,
       message: 'OK',
@@ -60,6 +59,7 @@ export class CartController {
   @Post('checkout')
   async checkout(@Req() req: AppRequest, @Body() body) {
     const userId = getUserIdFromRequest(req);
+    
     const cart = await this.cartService.findByUserId(userId);
 
     if (!(cart && cart.items.length)) {
@@ -74,24 +74,32 @@ export class CartController {
 
     const { id: cartId, items } = cart;
     const total = calculateCartTotal(cart);
-    
+
+    console.log('ORDER', { 
+      ...body, 
+      user_id: userId,
+      cart: cartId,
+      items,
+      total,
+    })
+
+
     const order = await this.orderService.create({
-      ...body, // TODO: validate and pick only necessary data
-      userId,
-      cartId,
+      ...body, 
+      user_id: userId,
+      cart: cartId,
       items,
       total,
     });
 
-  console.log( order)
+  //console.log('ORDER SAVED ', order)
     // TODO
-    //await this.cartService.removeByUserId(userId);
-    order.status = 'ORDERED'
-    await this.cartService.updateByUserId(userId, cart, CartStatuses.ORDERED)
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'OK',
-      data: { order },
-    };
+  //await this.cartService.removeByUserId(userId);
+  await this.cartService.updateByUserId(userId, cart, CartStatuses.ORDERED)
+  return {
+    statusCode: HttpStatus.OK,
+    message: 'OK',
+    data: { order },
+  };
   }
 }

@@ -1,2 +1,2 @@
-export * from './models';
+export * from './models/order';
 export * from './services';
