@@ -37,4 +37,8 @@ export class OrderService {
     }
     return updatedOrder;
   }
+
+  async findAll(): Promise<Order[]> {
+    return this.orderRepository.find();
+  }
 }

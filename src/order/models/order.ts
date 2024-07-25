@@ -14,10 +14,10 @@ import {
     id: string;
   
     @Column({ type: 'uuid' })
-    userId: string;
+    user_id: string;
   
     @Column({ type: 'uuid' })
-    cartId: string;
+    cart_id: string;
   
     @ManyToMany(() => CartItem)
     @JoinTable()
