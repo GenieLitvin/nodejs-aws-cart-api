@@ -23,7 +23,7 @@ export class OrderService {
   async  create(data: Partial<Order>): Promise<Order>  {
     const order = this.orderRepository.create({
       ...data,
-      id: v4(),
+        id: v4(),
       status: 'OPEN',
     });
     return this.orderRepository.save(order);

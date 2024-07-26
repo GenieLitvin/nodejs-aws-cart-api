@@ -61,45 +61,47 @@ export class CartController {
     const userId = getUserIdFromRequest(req);
     
     const cart = await this.cartService.findByUserId(userId);
-
+  
     if (!(cart && cart.items.length)) {
       const statusCode = HttpStatus.BAD_REQUEST;
       req.statusCode = statusCode;
-
+  
       return {
         statusCode,
         message: 'Cart is empty',
       };
     }
-
+  
     const { id: cartId, items } = cart;
     const total = calculateCartTotal(cart);
-
-    console.log('ORDER', { 
-      ...body, 
-      user_id: userId,
-      cart: cartId,
-      items,
-      total,
-    })
-
-
-    const order = await this.orderService.create({
-      ...body, 
-      user_id: userId,
-      cart: cartId,
-      items,
-      total,
-    });
-
-  //console.log('ORDER SAVED ', order)
-    // TODO
-  //await this.cartService.removeByUserId(userId);
-  await this.cartService.updateByUserId(userId, cart, CartStatuses.ORDERED)
-  return {
-    statusCode: HttpStatus.OK,
-    message: 'OK',
-    data: { order },
-  };
+  
+    try {
+      const order = await this.orderService.create({
+        comments: body.address.comment,
+        delivery: body.address,
+        user_id: userId,
+        cart: cart,
+        items: items.map(item => ({
+          productId: item.product.id,
+          count: item.count,
+        })),
+        total,
+        status: 'CREATED',
+      });
+  
+      await this.cartService.updateByUserId(userId, cart, CartStatuses.ORDERED)
+      console.log('saved');
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Order created successfully',
+        data: { order },
+      };
+    } catch (error) {
+      console.error('Error creating order:', error);
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error creating order',
+      };
+    }
   }
 }
