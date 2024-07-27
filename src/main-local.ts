@@ -7,7 +7,8 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token',
   });
-  await app.listen(3001); // Открываем сервер на порту 3000
-  console.log('Application is running on: http://localhost:3000');
+  const PORT = 3001;
+  await app.listen(PORT); // Открываем сервер на порту 3000
+  console.log(`Application is running on: http://localhost:${PORT}`);
 }
 bootstrap();
