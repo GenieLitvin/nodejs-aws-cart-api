@@ -64,7 +64,7 @@ export class CartController {
   
     if (!(cart && cart.items.length)) {
       const statusCode = HttpStatus.BAD_REQUEST;
-      req.statusCode = statusCode;
+      //req.statusCode = statusCode;
   
       return {
         statusCode,

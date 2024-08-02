@@ -6,10 +6,10 @@ WORKDIR /app
 #Copy package*.json file, intall dependencies
 COPY package*.json ./
 ENV NODE_ENV development
-RUN npm ci && npm cache clean --force
-
+RUN npm ci --only=production && npm cache clean --force
+#
 # copy source
-COPY * ./
+COPY . .
 
 #build
 RUN npm run build
