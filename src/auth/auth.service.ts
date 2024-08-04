@@ -11,17 +11,18 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  validateUser(name: string, password: string): any {
-    const user = this.usersService.findOne(name);
+  async validateUser(name: string, password: string): Promise<User> {
 
+    const user = await this.usersService.findOne(name);
     if (user) {
+      console.log('validateUser&',user);
       return user;
     }
-
     return this.usersService.createOne({ name, password })
   }
 
   login(user: User, type) {
+
     const LOGIN_MAP = {
       jwt: this.loginJWT,
       basic: this.loginBasic,
@@ -43,8 +44,7 @@ export class AuthService {
 
   loginBasic(user: User) {
     // const payload = { username: user.name, sub: user.id };
-    console.log(user);
-
+    
     function encodeUserToken(user) {
       const { id, name, password } = user;
       const buf = Buffer.from([name, password].join(':'), 'utf8');
