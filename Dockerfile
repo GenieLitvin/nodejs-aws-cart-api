@@ -1,6 +1,5 @@
-ARG NODE_VERSION=20.14.0
 # alpine - the light version of node
-FROM node:${NODE_VERSION}-alpine
+FROM node:18-alpine
 WORKDIR /app
 
 #Copy package*.json file, intall dependencies
