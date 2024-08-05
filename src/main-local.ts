@@ -9,6 +9,6 @@ async function bootstrap() {
   });
   const PORT = 3001;
   await app.listen(PORT); // Открываем сервер на порту 3000
-  console.log(`Application is running on: http://localhost:${PORT}`);
+  console.log(`Application is running on: http://localhost:${PORT}!!!`);
 }
 bootstrap();
