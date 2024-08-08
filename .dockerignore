@@ -1,0 +1,16 @@
+#Not needed in the Docker image, reducing its size and avoiding potential leaks of sensitive information
+.git
+bin
+cdk.out
+#Directory for compiled files, generated during the build process.
+dist
+dist-compiled
+lib
+#Contains dependencies installed via npm. These should be installed within the container to ensure compatibility with the container's environment.
+node_modules
+.dockerignore
+cdk.json
+Dockerfile
+npm-debug.log
+
+

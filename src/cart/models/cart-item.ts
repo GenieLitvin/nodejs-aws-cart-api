@@ -18,9 +18,8 @@ export class CartItem {
   @Column('int')
   count: number;
 
-  @ManyToOne(() => Cart, (cart) => cart.items)
+  @ManyToOne(() => Cart, (cart) => cart.items, {
+    onDelete: 'CASCADE',
+  })
   cart: Cart;
-
-  @ManyToMany(() => Order, (order) => order.items)
-  orders: Order[];
 }

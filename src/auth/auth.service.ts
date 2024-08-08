@@ -15,7 +15,6 @@ export class AuthService {
 
     const user = await this.usersService.findOne(name);
     if (user) {
-      console.log('validateUser&',user);
       return user;
     }
     return this.usersService.createOne({ name, password })

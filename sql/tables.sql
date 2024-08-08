@@ -1,11 +1,12 @@
-CREATE TYPE order_status AS ENUM ('OPEN', 'ORDERED');
+CREATE TYPE order_status AS ENUM ('CREATED');
+CREATE TYPE cart_status AS ENUM ('OPEN','ORDERED');
 
 CREATE TABLE carts (
     id UUID PRIMARY key default uuid_generate_v4(),
     user_id UUID NOT NULL,
     created_at DATE NOT NULL DEFAULT CURRENT_DATE,
     updated_at DATE NOT NULL DEFAULT CURRENT_DATE,
-    status order_status
+    status cart_status
 );
 
 CREATE TABLE cart_items (
